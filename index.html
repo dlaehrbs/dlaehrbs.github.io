@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>좌석 예매 사이트</title>
+	<style>
+		.container {
+			display: flex;
+			flex-wrap: wrap;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 50px;
+			box-sizing: border-box;
+			justify-content: center;
+		}
+		.seat {
+			width: 40px;
+			height: 40px;
+			background-color: #ddd;
+			margin: 10px;
+			border-radius: 5px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 18px;
+			font-weight: bold;
+			color: #444;
+			cursor: pointer;
+			user-select: none;
+		}
+		.seat.selected {
+			background-color: #bada55;
+			color: #fff;
+		}
+		.seat.reserved {
+			background-color: #999;
+			color: #fff;
+			cursor: not-allowed;
+		}
+		.button {
+			display: block;
+			margin: 30px auto;
+			padding: 10px 20px;
+			border-radius: 5px;
+			background-color: #009688;
+			color: #fff;
+			font-size: 16px;
+			font-weight: bold;
+			border: none;
+			cursor: pointer;
+		}
+		.hidden {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<script>
+			// 좌석 예매를 위한 좌석 배치 생성
+			const seatLayout = [];
+			for (let i = 0; i < 100; i++) {
+				const reserved = Math.random() < 0.3; // 30% 확률로 예약된 좌석 생성
+				const seat = { id: i+1, reserved };
+				seatLayout.push(seat);
+			}
+
+			// 좌석 선택
+			function selectSeat(event) {
+				const seat = event.target;
+				if (seat.classList.contains('reserved')) {
+					alert('이미 예약된 좌석입니다.');
+				} else {
+					seat.classList.toggle('selected');
+				}
+			}
+
+			// 좌석 예약
+			function reserveSeat() {
+				const selectedSeats = document.querySelectorAll('.selected');
+				if (selectedSeats.length === 0) {
+					alert('좌석을 선택해주세요.');
+					return;
+				}
+
+				// 비밀번호 입력
+				const password = prompt('예약을 위한 비밀번호를 입력해주세요.');
+				if (!password) {
+					alert('비밀번호를 입력해주세요.');
+					return;
+				}
+
+				// 예약 처리
+				selectedSeats.forEach((seat) => {
+					seat.classList.remove('selected');
+					seat.classList.add('reserved');
+					seat.dataset.password = password;
+				});
+				alert('예약이 완료되었습니다.');
+			}
+
+			//
